@@ -54,7 +54,9 @@ exports.paramsWhat = catchAsync(async (req, res, next) => {
     next();
 })
 exports.getAllUsers = handleFactory.getAll(User);
-exports.getUser = handleFactory.getOne(User);
+exports.getUser = handleFactory.getOne(User, {
+    path: 'followers',
+});
 exports.createUser = handleFactory.createOne(User);
 exports.updateUser = handleFactory.updateOne(User);
 exports.deleteUser = handleFactory.deleteOne(User);

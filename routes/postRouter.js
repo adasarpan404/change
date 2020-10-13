@@ -9,7 +9,7 @@ router.route('/').get(postController.getAllPosts).post(postController.createPost
 router.route('/:id').get(postController.getPost).patch(postController.updatePost).delete(postController.deletePost);
 
 router.route('/:id/comments').get(commentController.getAllComments).post(commentController.createComments);
-router.route('/:id/comment/:commentId').patch(commentController.updateCOmments).delete(commentController.deleteComments);
+router.route('/:id/comment/:commentId').patch(commentController.updateComments).delete(commentController.deleteComments);
 router.route('/:id/like').get(likeController.createLikes).post(likeController.createLikes);
 router.route('/:id/like/:likeId').delete(likeController.deleteLikes)
 module.exports = router;
