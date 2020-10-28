@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Post'
     },
-    User: {
+    user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     }
@@ -45,8 +45,8 @@ commentSchema.statics.calcNoOfComments = async function (post) {
         }
     }])
 
-    Post.findByIdAndUpdate(post, {
-        NoOfLikes: stats[0].nLikes
+    await Post.findByIdAndUpdate(post, {
+        NoOfComments: stats[0].nLikes
     })
 }
 commentSchema.post('save', function () {
@@ -54,6 +54,7 @@ commentSchema.post('save', function () {
 });
 commentSchema.pre(/^findOneAnd/, async function (next) {
     this.r = await this.findOne();
+    console.log(this.r);
     next();
 });
 commentSchema.post(/^findOneAnd/, async function () {

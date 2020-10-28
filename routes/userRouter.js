@@ -30,5 +30,5 @@ router
     .patch(userController.updateUser)
     .delete(userController.deleteUser);
 
-router.route('/:userId/follow').get(followerController.limitFollower, followerController.getAllfollower).patch(userController.paramsWhat, followerController.createFollower);
+router.route('/:userId/follow').get(followerController.limitFollower, followerController.getAllfollower).patch(followerController.setFollowFields, followerController.createFollower);
 module.exports = router;

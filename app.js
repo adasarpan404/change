@@ -7,6 +7,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const userRouter = require('./routes/userRouter');
 const postRouter = require('./routes/postRouter');
+const storyRouter = require('./routes/storiesRouter')
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controller/errorController');
 const app = express();
@@ -33,6 +34,7 @@ app.use(xss());
 
 app.use('/posts', postRouter);
 app.use('/users', userRouter);
+app.use('/story', storyRouter);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

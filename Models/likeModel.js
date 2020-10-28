@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
+const Post = require('./../Models/postModel')
 const likeSchema = new mongoose.Schema({
     createdAt: {
-
+        type: Date,
+        default: Date.now(),
     },
-    post: {
+    posts: {
         type: mongoose.Schema.ObjectId,
         ref: 'Post'
     },
@@ -15,29 +17,33 @@ const likeSchema = new mongoose.Schema({
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+likeSchema.index({ posts: 1, user: 1 }, { unique: true });
 likeSchema.statics.calcNoOfLikes = async function (post) {
+
     const stats = await this.aggregate([{
-        $match: { post: post }
+        $match: { posts: post }
     }, {
         $group: {
             _id: '$post',
             nLikes: { $sum: 1 }
         }
-    }]);
-    Post.findByIdAndUpdate(post, {
+    }
+
+    ]);
+    await Post.findByIdAndUpdate(post, {
         NoOfLikes: stats[0].nLikes
     });
 };
 likeSchema.post('save', function () {
-    this.constructor.calcNoOfLike(this.post);
+    this.constructor.calcNoOfLikes(this.posts);
 })
 likeSchema.pre(/^findOneAnd/, async function (next) {
     this.r = await this.findOne();
     next();
 })
 
-likeSchema.post(/^findOneAnd/, async function (next) {
-    await this.r.constructor.calcNoOfLikes(this.r.post);
+likeSchema.post(/^findOneAnd/, async function () {
+    await this.r.constructor.calcNoOfLikes(this.r.posts);
 })
 
 const Like = mongoose.model('Like', likeSchema)

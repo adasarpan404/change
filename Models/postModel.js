@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const postSchema = new mongoose.Schema({
     content: {
         type: String,
-        required: [true, 'post/blog must have a comment']
+        required: [true, 'post/blog must have a content']
     },
     user: {
         type: mongoose.Schema.ObjectId,
@@ -30,7 +30,7 @@ const postSchema = new mongoose.Schema({
 
 postSchema.virtual('likes', {
     ref: 'Like',
-    foreignField: 'post',
+    foreignField: 'posts',
     localField: '_id'
 });
 postSchema.virtual('comments', {

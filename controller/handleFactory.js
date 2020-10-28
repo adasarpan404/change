@@ -19,6 +19,7 @@ exports.deleteOne = (Model) =>
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.create(req.body);
+    console.log(req.body)
     res.status(201).json({
       status: 'success',
       data: {
@@ -33,7 +34,7 @@ exports.updateOne = (Model) =>
       new: true,
       runValidators: true,
     });
-    if (!tour) {
+    if (!doc) {
       return next(new AppError('No doc found with that ID', 404));
     }
     res.status(200).json({
@@ -49,11 +50,12 @@ exports.getOne = (Model, populationOptions) =>
     console.log(req.params.id)
     let query = Model.findById(req.params.id);
     if (populationOptions) query = query.populate(populationOptions);
-    const doc = await query;
+    const docs = await query;
     res.status(201).json({
       status: 'success',
+      results: docs.length,
       data: {
-        doc,
+        docs,
       },
     });
   });
@@ -61,20 +63,22 @@ exports.getOne = (Model, populationOptions) =>
 exports.getAll = (Model) =>
   catchAsync(async (req, res, next) => {
     let filter;
-    if (req.params.tourId) {
-      filter = { tour: req.params.tourId };
+    if (req.params.id) {
+      filter = { post: req.params.id };
     }
+    console.log(filter)
     const features = new APIFeatures(Model.find(filter), req.query)
       .filter()
       .sort()
       .limitFields()
       .paginate();
-    const tours = await features.query;
+    console.log(features)
+    const docs = await features.query;
     res.status(200).json({
       status: 'success',
-      results: tours.length,
+      results: docs.length,
       data: {
-        tours,
+        docs,
       },
     });
   });

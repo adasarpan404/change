@@ -50,7 +50,7 @@ exports.getMe = catchAsync(async (req, res, next) => {
 });
 
 exports.paramsWhat = catchAsync(async (req, res, next) => {
-    console.log(req.params)
+
     next();
 })
 exports.getAllUsers = handleFactory.getAll(User);
