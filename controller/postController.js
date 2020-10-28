@@ -1,5 +1,6 @@
 
 const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const Post = require('./../Models/postModel')
 const handleFactory = require('./handleFactory')
